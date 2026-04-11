@@ -55,7 +55,7 @@ struct AboutView: View {
                         Text(Branding.tagline)
                             .font(.body)
                             .italic()
-                            .foregroundStyle(Color.secondary)
+                            .foregroundStyle(Color.brandLime)
 
                         Text("Aplikaci Nekonečná renta jsme vytvořili, aby si každý mohl jednoduše spočítat, kolik potřebuje odkládat a kolik mu to jednou přinese.")
                             .font(.body)

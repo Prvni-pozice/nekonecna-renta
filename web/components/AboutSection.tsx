@@ -14,7 +14,7 @@ export default function AboutSection() {
           </summary>
 
           <div className="mt-4 space-y-4">
-            <p className="text-sm text-white/45 italic">{FIRMA_TAGLINE}</p>
+            <p className="text-sm italic font-medium" style={{ color: '#A3E635' }}>{FIRMA_TAGLINE}</p>
             <p className="text-sm text-white/35 leading-relaxed">
               Aplikaci Nekonečná renta jsme vytvořili, aby si každý mohl jednoduše spočítat,
               kolik potřebuje odkládat a kolik mu to jednou přinese.
