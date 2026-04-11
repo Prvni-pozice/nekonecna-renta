@@ -57,69 +57,6 @@
       "filename": "Icon-iphone-60@3x.png"
     },
     {
-      "idiom": "ipad",
-      "platform": "ios",
-      "scale": "1x",
-      "size": "20x20",
-      "filename": "Icon-ipad-20@1x.png"
-    },
-    {
-      "idiom": "ipad",
-      "platform": "ios",
-      "scale": "2x",
-      "size": "20x20",
-      "filename": "Icon-ipad-20@2x.png"
-    },
-    {
-      "idiom": "ipad",
-      "platform": "ios",
-      "scale": "1x",
-      "size": "29x29",
-      "filename": "Icon-ipad-29@1x.png"
-    },
-    {
-      "idiom": "ipad",
-      "platform": "ios",
-      "scale": "2x",
-      "size": "29x29",
-      "filename": "Icon-ipad-29@2x.png"
-    },
-    {
-      "idiom": "ipad",
-      "platform": "ios",
-      "scale": "1x",
-      "size": "40x40",
-      "filename": "Icon-ipad-40@1x.png"
-    },
-    {
-      "idiom": "ipad",
-      "platform": "ios",
-      "scale": "2x",
-      "size": "40x40",
-      "filename": "Icon-ipad-40@2x.png"
-    },
-    {
-      "idiom": "ipad",
-      "platform": "ios",
-      "scale": "1x",
-      "size": "76x76",
-      "filename": "Icon-ipad-76@1x.png"
-    },
-    {
-      "idiom": "ipad",
-      "platform": "ios",
-      "scale": "2x",
-      "size": "76x76",
-      "filename": "Icon-ipad-76@2x.png"
-    },
-    {
-      "idiom": "ipad",
-      "platform": "ios",
-      "scale": "2x",
-      "size": "83.5x83.5",
-      "filename": "Icon-ipad-83.5@2x.png"
-    },
-    {
       "idiom": "ios-marketing",
       "platform": "ios",
       "scale": "1x",
