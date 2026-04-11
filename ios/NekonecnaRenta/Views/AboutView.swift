@@ -62,7 +62,7 @@ struct AboutView: View {
                             .foregroundStyle(Color.secondary)
 
                         VStack(spacing: 10) {
-                            Button("Navštívit web") {
+                            Button("Navštívit web 1P") {
                                 showSafari = true
                             }
                             .buttonStyle(.bordered)
