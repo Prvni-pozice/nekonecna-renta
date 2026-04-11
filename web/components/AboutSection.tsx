@@ -24,15 +24,17 @@ export default function AboutSection() {
                 href={FIRMA_WEB}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block w-full text-center text-sm py-2.5 px-4 rounded-xl border border-white/15 text-white/50 hover:border-white/30 hover:text-white/70 transition-colors"
+                className="block w-full text-center text-sm py-2.5 px-4 rounded-xl font-medium text-black transition-colors"
+                style={{ backgroundColor: '#A3E635' }}
               >
                 Navštívit web 1P
               </a>
               <a
                 href={`mailto:${FIRMA_EMAIL}`}
-                className="block w-full text-center text-sm py-2.5 px-4 rounded-xl border border-white/15 text-white/50 hover:border-white/30 hover:text-white/70 transition-colors"
+                className="block w-full text-center text-sm py-2.5 px-4 rounded-xl font-medium text-black transition-colors"
+                style={{ backgroundColor: '#A3E635' }}
               >
-                Napsat nám
+                Napsat nám o podobnou aplikaci
               </a>
             </div>
           </div>

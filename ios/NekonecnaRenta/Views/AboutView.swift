@@ -65,19 +65,21 @@ struct AboutView: View {
                             Button("Navštívit web 1P") {
                                 showSafari = true
                             }
-                            .buttonStyle(.bordered)
-                            .tint(.brandAnthracite)
+                            .buttonStyle(.borderedProminent)
+                            .tint(.brandLime)
+                            .foregroundStyle(Color.black)
                             .frame(maxWidth: .infinity)
 
-                            Button("Napsat nám") {
+                            Button("Napsat nám o podobnou aplikaci") {
                                 if MFMailComposeViewController.canSendMail() {
                                     showMailCompose = true
                                 } else if let url = URL(string: "mailto:\(Branding.email)") {
                                     UIApplication.shared.open(url)
                                 }
                             }
-                            .buttonStyle(.bordered)
-                            .tint(.brandAnthracite)
+                            .buttonStyle(.borderedProminent)
+                            .tint(.brandLime)
+                            .foregroundStyle(Color.black)
                             .frame(maxWidth: .infinity)
                         }
                         .padding(.top, 4)
