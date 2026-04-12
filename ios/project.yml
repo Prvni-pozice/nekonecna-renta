@@ -26,6 +26,7 @@ targets:
         INFOPLIST_KEY_CFBundleDisplayName: "Nekonečná renta"
         INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
     schemes:
       NekonecnaRenta:
         build:
