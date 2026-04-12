@@ -17,6 +17,7 @@ targets:
       path: NekonecnaRenta/Info.plist
       properties:
         CFBundleDisplayName: "Nekonečná renta"
+        CFBundleIconName: AppIcon
         CFBundleShortVersionString: "1.0"
         CFBundleVersion: "1"
         UILaunchScreen: {}
