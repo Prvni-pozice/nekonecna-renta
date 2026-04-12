@@ -54,7 +54,7 @@ export default function Home() {
     if (ra !== null && ca !== null && ra <= ca) e.retirementAge = 'Musí být větší než aktuální věk.';
     if (ra !== null && ra > 85) e.retirementAge = 'Maximum je 85 let.';
     if (ry !== null && (ry < 1 || ry > 50)) e.rentaYears = 'Počet let renty musí být 1–50.';
-    if (mi !== null && (mi < 0 || mi > 1_000_000)) e.monthlyInvestment = 'Vklad musí být 0–1 000 000 Kč.';
+    if (mi !== null && (mi < 0 || mi > 10_000_000)) e.monthlyInvestment = 'Vklad musí být 0–10 000 000 Kč.';
     if (ar !== null && (ar < 0 || ar > 20)) e.annualRate = 'Zhodnocení musí být 0–20 %.';
 
     return e;
@@ -136,7 +136,8 @@ export default function Home() {
               value={monthlyInvestment}
               onChange={setMonthlyInvestment}
               min={0}
-              max={1_000_000}
+              max={10_000_000}
+              sliderMax={100_000}
               step={500}
               suffix="Kč"
               error={errors.monthlyInvestment}

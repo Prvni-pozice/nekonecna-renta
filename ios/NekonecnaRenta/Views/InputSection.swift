@@ -159,7 +159,7 @@ struct InputSection: View {
                 suffix: "Kč",
                 text: $vm.monthlyInvestment,
                 errorMessage: vm.errors["monthlyInvestment"],
-                range: 0...1_000_000,
+                range: 0...100_000,
                 step: 500,
                 keyboardType: .numberPad
             )

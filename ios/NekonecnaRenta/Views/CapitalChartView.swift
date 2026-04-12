@@ -84,6 +84,7 @@ struct CapitalChartView: View {
                     }
                 }
             }
+            .chartXScale(domain: result.inputs.currentAge...(result.chartData.last?.age ?? result.inputs.retirementAge))
             .frame(height: 260)
 
             // Legend

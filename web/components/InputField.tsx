@@ -11,6 +11,7 @@ interface InputFieldProps {
   onChange: (value: string) => void;
   min?: number;
   max?: number;
+  sliderMax?: number;
   step?: number;
   suffix?: string;
   hint?: string;
@@ -25,6 +26,7 @@ export default function InputField({
   onChange,
   min,
   max,
+  sliderMax,
   step = 1,
   suffix,
   hint,
@@ -32,7 +34,8 @@ export default function InputField({
   adornment,
 }: InputFieldProps) {
   const numericValue = parseFloat(value);
-  const hasSlider = min !== undefined && max !== undefined;
+  const effectiveSliderMax = sliderMax ?? max;
+  const hasSlider = min !== undefined && effectiveSliderMax !== undefined;
 
   return (
     <div className="space-y-1.5">
@@ -64,9 +67,9 @@ export default function InputField({
         <input
           type="range"
           min={min}
-          max={max}
+          max={effectiveSliderMax}
           step={step}
-          value={isNaN(numericValue) ? min : Math.min(Math.max(numericValue, min), max)}
+          value={isNaN(numericValue) ? min : Math.min(Math.max(numericValue, min!), effectiveSliderMax!)}
           onChange={(e) => onChange(e.target.value)}
           className="w-full h-1 appearance-none rounded-full cursor-pointer accent-lime-400 bg-white/20"
         />
