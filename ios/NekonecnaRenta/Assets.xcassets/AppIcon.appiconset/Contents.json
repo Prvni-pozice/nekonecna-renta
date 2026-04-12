@@ -1,67 +1,10 @@
 {
   "images": [
     {
-      "idiom": "iphone",
+      "filename": "Icon-appstore-1024.png",
+      "idiom": "universal",
       "platform": "ios",
-      "scale": "2x",
-      "size": "20x20",
-      "filename": "Icon-iphone-20@2x.png"
-    },
-    {
-      "idiom": "iphone",
-      "platform": "ios",
-      "scale": "3x",
-      "size": "20x20",
-      "filename": "Icon-iphone-20@3x.png"
-    },
-    {
-      "idiom": "iphone",
-      "platform": "ios",
-      "scale": "2x",
-      "size": "29x29",
-      "filename": "Icon-iphone-29@2x.png"
-    },
-    {
-      "idiom": "iphone",
-      "platform": "ios",
-      "scale": "3x",
-      "size": "29x29",
-      "filename": "Icon-iphone-29@3x.png"
-    },
-    {
-      "idiom": "iphone",
-      "platform": "ios",
-      "scale": "2x",
-      "size": "40x40",
-      "filename": "Icon-iphone-40@2x.png"
-    },
-    {
-      "idiom": "iphone",
-      "platform": "ios",
-      "scale": "3x",
-      "size": "40x40",
-      "filename": "Icon-iphone-40@3x.png"
-    },
-    {
-      "idiom": "iphone",
-      "platform": "ios",
-      "scale": "2x",
-      "size": "60x60",
-      "filename": "Icon-iphone-60@2x.png"
-    },
-    {
-      "idiom": "iphone",
-      "platform": "ios",
-      "scale": "3x",
-      "size": "60x60",
-      "filename": "Icon-iphone-60@3x.png"
-    },
-    {
-      "idiom": "ios-marketing",
-      "platform": "ios",
-      "scale": "1x",
-      "size": "1024x1024",
-      "filename": "Icon-appstore-1024.png"
+      "scale": "1x"
     },
     {
       "appearances": [
@@ -70,63 +13,10 @@
           "value": "dark"
         }
       ],
-      "idiom": "iphone",
+      "filename": "Icon-dark-appstore-1024.png",
+      "idiom": "universal",
       "platform": "ios",
-      "scale": "2x",
-      "size": "20x20",
-      "filename": "Icon-dark-iphone-20@2x.png"
-    },
-    {
-      "appearances": [
-        {
-          "appearance": "luminosity",
-          "value": "dark"
-        }
-      ],
-      "idiom": "iphone",
-      "platform": "ios",
-      "scale": "3x",
-      "size": "20x20",
-      "filename": "Icon-dark-iphone-20@3x.png"
-    },
-    {
-      "appearances": [
-        {
-          "appearance": "luminosity",
-          "value": "dark"
-        }
-      ],
-      "idiom": "iphone",
-      "platform": "ios",
-      "scale": "2x",
-      "size": "60x60",
-      "filename": "Icon-dark-iphone-60@2x.png"
-    },
-    {
-      "appearances": [
-        {
-          "appearance": "luminosity",
-          "value": "dark"
-        }
-      ],
-      "idiom": "iphone",
-      "platform": "ios",
-      "scale": "3x",
-      "size": "60x60",
-      "filename": "Icon-dark-iphone-60@3x.png"
-    },
-    {
-      "appearances": [
-        {
-          "appearance": "luminosity",
-          "value": "dark"
-        }
-      ],
-      "idiom": "ios-marketing",
-      "platform": "ios",
-      "scale": "1x",
-      "size": "1024x1024",
-      "filename": "Icon-dark-appstore-1024.png"
+      "scale": "1x"
     }
   ],
   "info": {
