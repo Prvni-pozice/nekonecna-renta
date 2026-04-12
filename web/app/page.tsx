@@ -7,6 +7,7 @@ import ResultCard from '@/components/ResultCard';
 import CapitalChart from '@/components/CapitalChart';
 import CalculationBreakdown from '@/components/CalculationBreakdown';
 import AboutSection from '@/components/AboutSection';
+import ShareButton from '@/components/ShareButton';
 import { calculate } from '@/lib/calculations';
 
 function InfoIcon() {
@@ -200,6 +201,9 @@ export default function Home() {
             <div className="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-xl shadow-black/30">
               <CalculationBreakdown breakdown={result.breakdown} />
             </div>
+
+            {/* Sdílet */}
+            <ShareButton result={result} />
           </>
         ) : (
           <div className="rounded-2xl border border-dashed border-white/10 p-10 text-center text-white/25 text-sm tracking-wide">
