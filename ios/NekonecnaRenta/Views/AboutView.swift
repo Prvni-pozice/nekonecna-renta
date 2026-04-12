@@ -34,7 +34,7 @@ struct MailComposeView: UIViewControllerRepresentable {
         func mailComposeController(_ controller: MFMailComposeViewController,
                                    didFinishWith result: MFMailComposeResult,
                                    error: Error?) {
-            Task { @MainActor in dismiss() }
+            Task { @MainActor [dismiss] in dismiss() }
         }
     }
 }
