@@ -94,6 +94,7 @@ struct ContentView: View {
 
                     CapitalChartView(result: result)
                     BreakdownView(result: result)
+                    ShareButtonView(result: result)
                 } else {
                     RoundedRectangle(cornerRadius: 16)
                         .strokeBorder(style: StrokeStyle(lineWidth: 1.5, dash: [8, 4]))
