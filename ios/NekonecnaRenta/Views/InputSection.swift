@@ -45,9 +45,78 @@ struct InputField: View {
     }
 }
 
+struct SliderInputField: View {
+    let label: String
+    let suffix: String
+    @Binding var text: String
+    let errorMessage: String?
+    let range: ClosedRange<Double>
+    let step: Double
+    var keyboardType: UIKeyboardType = .numberPad
+    var format: String = "%.0f"
+
+    private var sliderValue: Binding<Double> {
+        Binding(
+            get: {
+                let normalized = text.replacingOccurrences(of: ",", with: ".")
+                let parsed = Double(normalized) ?? range.lowerBound
+                return min(max(parsed, range.lowerBound), range.upperBound)
+            },
+            set: { newValue in
+                text = String(format: format, newValue)
+            }
+        )
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(label)
+                .font(.caption)
+                .fontWeight(.medium)
+                .foregroundStyle(Color.secondary)
+
+            HStack(spacing: 0) {
+                TextField("0", text: $text)
+                    .keyboardType(keyboardType)
+                    .font(.body)
+                    .padding(.vertical, 10)
+                    .padding(.leading, 12)
+
+                Text(suffix)
+                    .font(.caption)
+                    .foregroundStyle(Color.secondary)
+                    .padding(.trailing, 12)
+                    .padding(.vertical, 10)
+            }
+            .background(
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color(.systemGray6))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(errorMessage != nil ? Color.red.opacity(0.7) : Color.clear, lineWidth: 1)
+            )
+
+            Slider(value: sliderValue, in: range, step: step)
+                .tint(Color.brandLime)
+
+            if let error = errorMessage {
+                Text(error)
+                    .font(.caption2)
+                    .foregroundStyle(Color.red)
+            }
+        }
+    }
+}
+
 struct InputSection: View {
     @Bindable var vm: RentaViewModel
     @State private var showRateInfo = false
+
+    private var retirementAgeRange: ClosedRange<Double> {
+        let minAge = Double(max(Int(vm.currentAge) ?? 19, 18) + 1)
+        return minAge...85
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -55,43 +124,45 @@ struct InputSection: View {
                 .font(.headline)
                 .fontWeight(.semibold)
 
-            // Row 1: currentAge + retirementAge
-            HStack(spacing: 12) {
-                InputField(
-                    label: "Aktuální věk",
-                    suffix: "let",
-                    text: $vm.currentAge,
-                    errorMessage: vm.errors["currentAge"],
-                    keyboardType: .numberPad
-                )
-                InputField(
-                    label: "Věk do důchodu",
-                    suffix: "let",
-                    text: $vm.retirementAge,
-                    errorMessage: vm.errors["retirementAge"],
-                    keyboardType: .numberPad
-                )
-            }
+            SliderInputField(
+                label: "Aktuální věk",
+                suffix: "let",
+                text: $vm.currentAge,
+                errorMessage: vm.errors["currentAge"],
+                range: 18...80,
+                step: 1,
+                keyboardType: .numberPad
+            )
 
-            // Row 2: rentaYears + monthlyInvestment
-            HStack(spacing: 12) {
-                InputField(
-                    label: "Roky pobírání renty",
-                    suffix: "let",
-                    text: $vm.rentaYears,
-                    errorMessage: vm.errors["rentaYears"],
-                    keyboardType: .numberPad
-                )
-                InputField(
-                    label: "Měsíční investice",
-                    suffix: "Kč",
-                    text: $vm.monthlyInvestment,
-                    errorMessage: vm.errors["monthlyInvestment"],
-                    keyboardType: .decimalPad
-                )
-            }
+            SliderInputField(
+                label: "Věk do důchodu",
+                suffix: "let",
+                text: $vm.retirementAge,
+                errorMessage: vm.errors["retirementAge"],
+                range: retirementAgeRange,
+                step: 1,
+                keyboardType: .numberPad
+            )
 
-            // Row 3: annual rate with info button
+            SliderInputField(
+                label: "Roky pobírání renty",
+                suffix: "let",
+                text: $vm.rentaYears,
+                errorMessage: vm.errors["rentaYears"],
+                range: 1...50,
+                step: 1,
+                keyboardType: .numberPad
+            )
+
+            InputField(
+                label: "Měsíční investice",
+                suffix: "Kč",
+                text: $vm.monthlyInvestment,
+                errorMessage: vm.errors["monthlyInvestment"],
+                keyboardType: .decimalPad
+            )
+
+            // Roční zhodnocení with info button
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 6) {
                     Text("Roční zhodnocení")
@@ -126,13 +197,6 @@ struct InputSection: View {
                         .padding(.vertical, 10)
                         .padding(.leading, 12)
 
-                    Stepper("", value: Binding(
-                        get: { Double(vm.annualRate.replacingOccurrences(of: ",", with: ".")) ?? 0 },
-                        set: { vm.annualRate = String(format: "%.1f", $0) }
-                    ), in: 0...20, step: 0.1)
-                    .labelsHidden()
-                    .padding(.trailing, 4)
-
                     Text("%")
                         .font(.caption)
                         .foregroundStyle(Color.secondary)
@@ -147,6 +211,20 @@ struct InputSection: View {
                     RoundedRectangle(cornerRadius: 10)
                         .stroke(vm.errors["annualRate"] != nil ? Color.red.opacity(0.7) : Color.clear, lineWidth: 1)
                 )
+
+                Slider(
+                    value: Binding(
+                        get: {
+                            let normalized = vm.annualRate.replacingOccurrences(of: ",", with: ".")
+                            let parsed = Double(normalized) ?? 0
+                            return min(max(parsed, 0), 20)
+                        },
+                        set: { vm.annualRate = String(format: "%.1f", $0) }
+                    ),
+                    in: 0...20,
+                    step: 1
+                )
+                .tint(Color.brandLime)
 
                 if let error = vm.errors["annualRate"] {
                     Text(error)
