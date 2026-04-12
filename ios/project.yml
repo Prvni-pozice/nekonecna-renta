@@ -24,6 +24,9 @@ targets:
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
     settings:
+      base:
+        DEVELOPMENT_TEAM: 4NQ89N9F5J
+        CODE_SIGN_STYLE: Automatic
       PRODUCT_BUNDLE_IDENTIFIER: cz.nazevfirmy.nekonecnarenta
       MARKETING_VERSION: "1.0"
       CURRENT_PROJECT_VERSION: "1"
