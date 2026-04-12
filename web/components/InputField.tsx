@@ -31,6 +31,9 @@ export default function InputField({
   error,
   adornment,
 }: InputFieldProps) {
+  const numericValue = parseFloat(value);
+  const hasSlider = min !== undefined && max !== undefined;
+
   return (
     <div className="space-y-1.5">
       <div className="flex items-center gap-1.5">
@@ -57,6 +60,17 @@ export default function InputField({
           </span>
         )}
       </div>
+      {hasSlider && (
+        <input
+          type="range"
+          min={min}
+          max={max}
+          step={step}
+          value={isNaN(numericValue) ? min : Math.min(Math.max(numericValue, min), max)}
+          onChange={(e) => onChange(e.target.value)}
+          className="w-full h-1 appearance-none rounded-full cursor-pointer accent-lime-400 bg-white/20"
+        />
+      )}
       {error && <p className="text-xs text-red-400">{error}</p>}
       {hint && !error && <p className="text-xs text-white/30">{hint}</p>}
     </div>

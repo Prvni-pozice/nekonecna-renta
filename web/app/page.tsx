@@ -136,6 +136,7 @@ export default function Home() {
               onChange={setMonthlyInvestment}
               min={0}
               max={1_000_000}
+              step={500}
               suffix="Kč"
               error={errors.monthlyInvestment}
             />

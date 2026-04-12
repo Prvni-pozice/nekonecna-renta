@@ -154,12 +154,14 @@ struct InputSection: View {
                 keyboardType: .numberPad
             )
 
-            InputField(
+            SliderInputField(
                 label: "Měsíční investice",
                 suffix: "Kč",
                 text: $vm.monthlyInvestment,
                 errorMessage: vm.errors["monthlyInvestment"],
-                keyboardType: .decimalPad
+                range: 0...1_000_000,
+                step: 500,
+                keyboardType: .numberPad
             )
 
             // Roční zhodnocení with info button
