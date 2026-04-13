@@ -57,12 +57,12 @@ struct AboutView: View {
                             .italic()
                             .foregroundStyle(Color.brandLime)
 
-                        Text("Aplikaci Nekonečná renta jsme vytvořili, aby si každý mohl jednoduše spočítat, kolik potřebuje odkládat a kolik mu to jednou přinese.")
+                        Text("We created the Endless Annuity app so everyone can easily calculate how much they need to save and how much it will bring them.")
                             .font(.body)
                             .foregroundStyle(Color.secondary)
 
                         VStack(spacing: 10) {
-                            Button("Navštívit web 1P") {
+                            Button(String(localized: "Visit 1P website")) {
                                 showSafari = true
                             }
                             .buttonStyle(.borderedProminent)
@@ -70,7 +70,7 @@ struct AboutView: View {
                             .foregroundStyle(Color.black)
                             .frame(maxWidth: .infinity)
 
-                            Button("Napsat nám o podobnou aplikaci") {
+                            Button(String(localized: "Write to us about a similar app")) {
                                 if MFMailComposeViewController.canSendMail() {
                                     showMailCompose = true
                                 } else if let url = URL(string: "mailto:\(Branding.email)") {
@@ -86,7 +86,7 @@ struct AboutView: View {
                     }
                     .padding(.top, 12)
                 } label: {
-                    Text("O aplikaci")
+                    Text("About the app")
                         .font(.headline)
                         .fontWeight(.semibold)
                         .foregroundStyle(Color.primary)
@@ -108,7 +108,7 @@ struct AboutView: View {
                 Button {
                     showSafari = true
                 } label: {
-                    Text("Vytvořila ")
+                    Text(String(localized: "Created by "))
                         .foregroundStyle(Color.secondary) +
                     Text(Branding.companyName)
                         .underline()
@@ -116,7 +116,7 @@ struct AboutView: View {
                 }
                 .font(.footnote)
 
-                Text("v\(Branding.appVersion) · Orientační výpočet, nejedná se o investiční doporučení.")
+                Text("v\(Branding.appVersion) · Indicative calculation, not investment advice.")
                     .font(.caption2)
                     .foregroundStyle(Color.secondary.opacity(0.5))
                     .multilineTextAlignment(.center)

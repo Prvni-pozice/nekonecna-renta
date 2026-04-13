@@ -19,33 +19,33 @@ struct CapitalChartView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Vývoj kapitálu v čase")
+            Text("Capital development over time")
                 .font(.headline)
                 .fontWeight(.semibold)
 
             Chart {
                 ForEach(result.chartData) { point in
                     AreaMark(
-                        x: .value("Věk", point.age),
-                        y: .value("Kapitál", point.capital)
+                        x: .value(String(localized: "Age"), point.age),
+                        y: .value(String(localized: "Capital"), point.capital)
                     )
                     .foregroundStyle(areaGradient)
                     .interpolationMethod(.monotone)
 
                     LineMark(
-                        x: .value("Věk", point.age),
-                        y: .value("Kapitál", point.capital)
+                        x: .value(String(localized: "Age"), point.age),
+                        y: .value(String(localized: "Capital"), point.capital)
                     )
                     .foregroundStyle(Color.brandLime)
                     .lineStyle(StrokeStyle(lineWidth: 2))
                     .interpolationMethod(.monotone)
                 }
 
-                RuleMark(x: .value("Důchod", result.inputs.retirementAge))
+                RuleMark(x: .value(String(localized: "Retirement"), result.inputs.retirementAge))
                     .foregroundStyle(Color.secondary.opacity(0.5))
                     .lineStyle(StrokeStyle(lineWidth: 1.5, dash: [5, 3]))
                     .annotation(position: .top, alignment: .center) {
-                        Text("Důchod")
+                        Text("Retirement")
                             .font(.caption2)
                             .fontWeight(.medium)
                             .foregroundStyle(Color.secondary)
@@ -93,7 +93,7 @@ struct CapitalChartView: View {
                     RoundedRectangle(cornerRadius: 2)
                         .fill(Color.brandLime)
                         .frame(width: 16, height: 3)
-                    Text("Hodnota portfolia")
+                    Text("Portfolio value")
                         .font(.caption2)
                         .foregroundStyle(Color.secondary)
                 }
@@ -101,7 +101,7 @@ struct CapitalChartView: View {
                     Rectangle()
                         .fill(Color.secondary.opacity(0.5))
                         .frame(width: 16, height: 1)
-                    Text("Věk odchodu do důchodu")
+                    Text("Retirement age")
                         .font(.caption2)
                         .foregroundStyle(Color.secondary)
                 }

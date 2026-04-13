@@ -1,17 +1,10 @@
 'use client';
 
 import { Breakdown } from '@/lib/calculations';
+import { useDict } from '@/lib/dict-context';
 
 interface Props {
   breakdown: Breakdown;
-}
-
-function fmt(n: number): string {
-  return new Intl.NumberFormat('cs-CZ').format(n) + ' Kč';
-}
-
-function fmtNum(n: number): string {
-  return new Intl.NumberFormat('cs-CZ').format(n);
 }
 
 function Row({ label, value }: { label: string; value: string }) {
@@ -41,6 +34,9 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 }
 
 export default function CalculationBreakdown({ breakdown }: Props) {
+  const dict = useDict();
+  const fmt = dict.fmt;
+  const fmtNum = dict.fmtNum;
   const {
     currentAge,
     retirementAge,
@@ -66,29 +62,29 @@ export default function CalculationBreakdown({ breakdown }: Props) {
   return (
     <details className="group">
       <summary className="cursor-pointer list-none flex items-center justify-between py-3 px-4 rounded-xl bg-white/5 hover:bg-white/8 border border-white/8 transition-colors select-none">
-        <span className="text-sm font-medium text-white/50">Jak jsme to spočítali</span>
+        <span className="text-sm font-medium text-white/50">{dict.breakdownTitle}</span>
         <span className="text-white/25 text-xs group-open:rotate-180 transition-transform inline-block">▼</span>
       </summary>
 
       <div className="mt-3 px-1 space-y-1">
-        {/* Vstupy */}
-        <Section title="Vstupy">
-          <Row label="Aktuální věk" value={`${currentAge} let`} />
-          <Row label="Věk odchodu do důchodu" value={`${retirementAge} let`} />
-          <Row label="Počet let renty" value={`${rentaYears} let`} />
-          <Row label="Měsíční vklad" value={fmt(monthlyInvestment)} />
-          <Row label="Roční zhodnocení" value={`${annualRate} %`} />
+        {/* Inputs */}
+        <Section title={dict.breakdownInputs}>
+          <Row label={dict.breakdownCurrentAge} value={`${currentAge} ${dict.inputSuffixYears}`} />
+          <Row label={dict.breakdownRetirementAge} value={`${retirementAge} ${dict.inputSuffixYears}`} />
+          <Row label={dict.breakdownRentaYears} value={`${rentaYears} ${dict.inputSuffixYears}`} />
+          <Row label={dict.breakdownMonthlyInvestment} value={fmt(monthlyInvestment)} />
+          <Row label={dict.breakdownAnnualRate} value={`${annualRate} %`} />
         </Section>
 
-        {/* Fáze spoření */}
-        <Section title="Fáze spoření">
-          <Row label="Doba spoření" value={`${savingsYears} let = ${fmtNum(nSpor)} měsíců`} />
-          <Row label="Měsíční úroková sazba" value={`${monthlyRatePct} %`} />
-          <p className="text-xs text-white/25 italic pl-1">Převedeno z roční sazby přes (1+r)^(1/12)−1</p>
-          <Row label="Celkem vložíš ze svého" value={fmt(totalDeposited)} />
-          <Row label="Z toho výnos (úroky)" value={fmt(totalInterest)} />
+        {/* Savings phase */}
+        <Section title={dict.breakdownSavingsPhase}>
+          <Row label={dict.breakdownSavingsPhase} value={dict.breakdownSavingsDuration(savingsYears, nSpor)} />
+          <Row label={dict.breakdownMonthlyRate} value={`${monthlyRatePct} %`} />
+          <p className="text-xs text-white/25 italic pl-1">{dict.breakdownMonthlyRateNote}</p>
+          <Row label={dict.breakdownTotalDeposited} value={fmt(totalDeposited)} />
+          <Row label={dict.breakdownTotalInterest} value={fmt(totalInterest)} />
           <div className="flex justify-between items-baseline gap-4 py-1.5 bg-lime-400/10 rounded-lg px-2 mt-1 border border-lime-400/15">
-            <span className="text-sm font-semibold text-white/60">Naspořeno celkem</span>
+            <span className="text-sm font-semibold text-white/60">{dict.breakdownTotalSaved}</span>
             <span className="text-sm font-bold text-lime-400">{fmt(fv)}</span>
           </div>
           <Formula>
@@ -99,15 +95,15 @@ export default function CalculationBreakdown({ breakdown }: Props) {
 
         {/* Milníky */}
         {milestones.length > 0 && (
-          <Section title="Orientační milníky spoření">
+          <Section title={dict.breakdownMilestones}>
             <div className="overflow-x-auto rounded-lg border border-white/8">
               <table className="w-full text-xs">
                 <thead>
                   <tr className="bg-white/5">
-                    <th className="text-left px-3 py-2 text-white/35 font-medium">Věk</th>
-                    <th className="text-right px-3 py-2 text-white/35 font-medium">Vloženo</th>
-                    <th className="text-right px-3 py-2 text-white/35 font-medium">Hodnota</th>
-                    <th className="text-right px-3 py-2 text-white/35 font-medium">Výnos</th>
+                    <th className="text-left px-3 py-2 text-white/35 font-medium">{dict.breakdownTableAge}</th>
+                    <th className="text-right px-3 py-2 text-white/35 font-medium">{dict.breakdownTableDeposited}</th>
+                    <th className="text-right px-3 py-2 text-white/35 font-medium">{dict.breakdownTableValue}</th>
+                    <th className="text-right px-3 py-2 text-white/35 font-medium">{dict.breakdownTableReturn}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -125,27 +121,26 @@ export default function CalculationBreakdown({ breakdown }: Props) {
           </Section>
         )}
 
-        {/* Fáze výplaty */}
-        <Section title="Fáze výplaty renty">
-          <Row label="Počet měsíců čerpání" value={`${fmtNum(nRenta)} měsíců`} />
+        {/* Withdrawal phase */}
+        <Section title={dict.breakdownWithdrawalPhase}>
+          <Row label={dict.breakdownWithdrawalPhase} value={dict.breakdownWithdrawalMonths(nRenta)} />
           <Formula>
             R = FV × (i × (1+i)^n) / ((1+i)^n − 1)<br />
             R = {fmt(fv)} × ({monthlyRatePct}% × (1+{monthlyRatePct}%)^{nRenta}) / ((1+{monthlyRatePct}%)^{nRenta} − 1)
           </Formula>
-          <Row label="Celkem vyplaceno" value={fmt(totalPaidOut)} />
-          <Row label="Z toho jistina" value={fmt(principalInRenta)} />
-          <Row label="Z toho úroky během čerpání" value={fmt(interestInRenta)} />
+          <Row label={dict.breakdownTotalPaidOut} value={fmt(totalPaidOut)} />
+          <Row label={dict.breakdownPrincipal} value={fmt(principalInRenta)} />
+          <Row label={dict.breakdownInterestDuringWithdrawal} value={fmt(interestInRenta)} />
         </Section>
 
-        {/* Nekonečná renta */}
-        <Section title="Nekonečná renta">
+        {/* Endless Annuity */}
+        <Section title={dict.breakdownInfiniteTitle}>
           <Formula>
             R∞ = FV × i<br />
             {infFormulaDecomposed}
           </Formula>
           <p className="text-sm text-white/35 pt-1 pb-2">
-            Každý měsíc vybereš přesně tolik, kolik ti kapitál vydělal.
-            Jistina <span className="font-medium text-white/60">{fmt(fv)}</span> zůstává nedotčená a vydělává dál.
+            {dict.breakdownInfiniteExplanation(fmt(fv))}
           </p>
         </Section>
       </div>

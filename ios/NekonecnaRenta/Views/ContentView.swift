@@ -19,21 +19,21 @@ final class RentaViewModel {
         let ar = Double(annualRate.replacingOccurrences(of: ",", with: ".")) ?? -1
 
         if ca < 18 || ca > 80 {
-            errs["currentAge"] = "Věk musí být 18–80 let"
+            errs["currentAge"] = String(localized: "Age must be 18–80")
         }
         if ra <= ca {
-            errs["retirementAge"] = "Musí být vyšší než aktuální věk"
+            errs["retirementAge"] = String(localized: "Must be higher than current age")
         } else if ra > 85 {
-            errs["retirementAge"] = "Maximálně 85 let"
+            errs["retirementAge"] = String(localized: "Maximum 85 years")
         }
         if ry < 1 || ry > 50 {
-            errs["rentaYears"] = "Roky renty musí být 1–50"
+            errs["rentaYears"] = String(localized: "Annuity years must be 1–50")
         }
         if mi < 0 || mi > 1_000_000 {
-            errs["monthlyInvestment"] = "Investice 0–1 000 000 Kč"
+            errs["monthlyInvestment"] = String(localized: "Investment 0–1,000,000 CZK")
         }
         if ar < 0 || ar > 20 {
-            errs["annualRate"] = "Zhodnocení 0–20 %"
+            errs["annualRate"] = String(localized: "Return 0–20%")
         }
 
         return errs
@@ -66,11 +66,11 @@ struct ContentView: View {
             VStack(spacing: 20) {
                 // Header
                 VStack(spacing: 6) {
-                    Text("Nekonečná renta")
+                    Text("Endless Annuity")
                         .font(.largeTitle)
                         .fontWeight(.bold)
                         .foregroundStyle(Color.primary)
-                    Text("Spočítej si, jak velkou rentu si naspoříš")
+                    Text("Calculate how much you can save for retirement")
                         .font(.subheadline)
                         .foregroundStyle(Color.secondary)
                         .multilineTextAlignment(.center)
@@ -86,7 +86,7 @@ struct ContentView: View {
                     ResultCardsView(result: result)
 
                     // Disclaimer
-                    Text("Orientační výpočet. Nezohledňuje inflaci ani daně z výnosů. Nejedná se o investiční doporučení.")
+                    Text("Indicative calculation. Does not account for inflation or investment taxes. Not investment advice.")
                         .font(.caption2)
                         .foregroundStyle(Color.secondary.opacity(0.6))
                         .multilineTextAlignment(.center)
@@ -101,7 +101,7 @@ struct ContentView: View {
                         .foregroundStyle(Color.secondary.opacity(0.4))
                         .frame(height: 120)
                         .overlay {
-                            Text("Vyplň správně všechna pole pro zobrazení výsledků")
+                            Text("Fill in all fields correctly to see your results")
                                 .font(.body)
                                 .foregroundStyle(Color.secondary)
                                 .multilineTextAlignment(.center)

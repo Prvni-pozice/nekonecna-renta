@@ -120,13 +120,13 @@ struct InputSection: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Nastavení")
+            Text("Settings")
                 .font(.headline)
                 .fontWeight(.semibold)
 
             SliderInputField(
-                label: "Aktuální věk",
-                suffix: "let",
+                label: String(localized: "Current age"),
+                suffix: String(localized: "yrs"),
                 text: $vm.currentAge,
                 errorMessage: vm.errors["currentAge"],
                 range: 18...80,
@@ -135,8 +135,8 @@ struct InputSection: View {
             )
 
             SliderInputField(
-                label: "Věk do důchodu",
-                suffix: "let",
+                label: String(localized: "Retirement age"),
+                suffix: String(localized: "yrs"),
                 text: $vm.retirementAge,
                 errorMessage: vm.errors["retirementAge"],
                 range: retirementAgeRange,
@@ -145,8 +145,8 @@ struct InputSection: View {
             )
 
             SliderInputField(
-                label: "Roky pobírání renty",
-                suffix: "let",
+                label: String(localized: "Annuity years"),
+                suffix: String(localized: "yrs"),
                 text: $vm.rentaYears,
                 errorMessage: vm.errors["rentaYears"],
                 range: 1...50,
@@ -155,7 +155,7 @@ struct InputSection: View {
             )
 
             SliderInputField(
-                label: "Měsíční investice",
+                label: String(localized: "Monthly investment"),
                 suffix: "Kč",
                 text: $vm.monthlyInvestment,
                 errorMessage: vm.errors["monthlyInvestment"],
@@ -164,10 +164,10 @@ struct InputSection: View {
                 keyboardType: .numberPad
             )
 
-            // Roční zhodnocení with info button
+            // Annual return with info button
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 6) {
-                    Text("Roční zhodnocení")
+                    Text("Annual return")
                         .font(.caption)
                         .fontWeight(.medium)
                         .foregroundStyle(Color.secondary)
@@ -181,9 +181,9 @@ struct InputSection: View {
                     }
                     .popover(isPresented: $showRateInfo) {
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("O ročním zhodnocení")
+                            Text("About Annual Return")
                                 .font(.headline)
-                            Text("Obvykle 4–10 % podle typu investic. Konzervativní portfolio ~4 %, vyvážené ~6 %, dynamické ~8–10 %. Nezohledňuje inflaci.")
+                            Text("Usually 4–10% depending on investment type. Conservative portfolio ~4%, balanced ~6%, aggressive ~8–10%. Excludes inflation.")
                                 .font(.body)
                         }
                         .padding()

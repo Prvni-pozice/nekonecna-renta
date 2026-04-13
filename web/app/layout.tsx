@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import "./globals.css";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import Providers from "@/components/Providers";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -10,8 +10,8 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: "Nekonečná renta",
-  description: "Spočítej, jakou měsíční rentu si budeš moci vyplácet v důchodu.",
+  title: "Endless Annuity / Nekonečná renta",
+  description: "Calculate your monthly retirement annuity / Spočítej si svou měsíční rentu v důchodu.",
 };
 
 export default function RootLayout({
@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="cs" className={`${roboto.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col font-sans">
-        <TooltipProvider>{children}</TooltipProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

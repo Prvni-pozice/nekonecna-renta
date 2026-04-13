@@ -53,16 +53,16 @@ private struct MilestoneTableView: View {
         VStack(spacing: 0) {
             // Header
             HStack {
-                Text("Věk")
+                Text("Age")
                     .frame(width: 36, alignment: .leading)
                 Spacer()
-                Text("Vloženo")
+                Text("Deposited")
                     .frame(width: 90, alignment: .trailing)
                 Spacer()
                 Text("Portfolio")
                     .frame(width: 90, alignment: .trailing)
                 Spacer()
-                Text("Výnos")
+                Text("Return")
                     .frame(width: 90, alignment: .trailing)
             }
             .font(.caption2)
@@ -112,59 +112,59 @@ struct BreakdownView: View {
             DisclosureGroup(isExpanded: $isExpanded) {
                 VStack(alignment: .leading, spacing: 12) {
                     // Section: Inputs
-                    SectionHeader(title: "Vstupy")
+                    SectionHeader(title: String(localized: "Inputs"))
                     VStack(spacing: 0) {
-                        RowView(label: "Aktuální věk", value: "\(result.inputs.currentAge) let")
-                        RowView(label: "Věk do důchodu", value: "\(result.inputs.retirementAge) let")
-                        RowView(label: "Roky pobírání renty", value: "\(result.inputs.rentaYears) let")
-                        RowView(label: "Měsíční investice", value: result.inputs.monthlyInvestment.formattedCZKDouble)
-                        RowView(label: "Roční zhodnocení", value: "\(result.inputs.annualReturnRate) %")
-                        RowView(label: "Měsíční sazba (i)", value: "\(result.breakdown.monthlyRatePct) %")
+                        RowView(label: String(localized: "Current age"), value: "\(result.inputs.currentAge) \(String(localized: "yrs"))")
+                        RowView(label: String(localized: "Retirement age"), value: "\(result.inputs.retirementAge) \(String(localized: "yrs"))")
+                        RowView(label: String(localized: "Annuity years"), value: "\(result.inputs.rentaYears) \(String(localized: "yrs"))")
+                        RowView(label: String(localized: "Monthly investment"), value: result.inputs.monthlyInvestment.formattedCZKDouble)
+                        RowView(label: String(localized: "Annual return"), value: "\(result.inputs.annualReturnRate) %")
+                        RowView(label: String(localized: "Monthly rate (i)"), value: "\(result.breakdown.monthlyRatePct) %")
                     }
 
                     Divider()
 
                     // Section: Savings phase
-                    SectionHeader(title: "Fáze spoření")
+                    SectionHeader(title: String(localized: "Savings phase"))
                     let nSpor = (result.inputs.retirementAge - result.inputs.currentAge) * 12
-                    FormulaBox(text: "FV = PMT × ((1+i)^n − 1) / i\nPMT = \(result.inputs.monthlyInvestment.formattedCZKDouble), i = \(result.breakdown.monthlyRatePct) %, n = \(nSpor) měs.")
+                    FormulaBox(text: "FV = PMT × ((1+i)^n − 1) / i\nPMT = \(result.inputs.monthlyInvestment.formattedCZKDouble), i = \(result.breakdown.monthlyRatePct) %, n = \(nSpor) \(String(localized: "mo."))")
                     VStack(spacing: 0) {
-                        RowView(label: "Celkem vloženo", value: result.breakdown.totalDeposited.formattedCZK)
-                        RowView(label: "Výnosy z investic", value: result.breakdown.totalInterest.formattedCZK)
-                        RowView(label: "Hodnota portfolia při odchodu do důchodu", value: result.futureValue.formattedCZK, highlighted: true)
+                        RowView(label: String(localized: "Total deposited"), value: result.breakdown.totalDeposited.formattedCZK)
+                        RowView(label: String(localized: "Investment returns"), value: result.breakdown.totalInterest.formattedCZK)
+                        RowView(label: String(localized: "Portfolio value at retirement"), value: result.futureValue.formattedCZK, highlighted: true)
                     }
 
                     Divider()
 
                     // Section: Milestones
-                    SectionHeader(title: "Vývoj portfolia po etapách")
+                    SectionHeader(title: String(localized: "Portfolio development by stages"))
                     MilestoneTableView(milestones: result.milestones)
 
                     Divider()
 
                     // Section: Withdrawal phase
-                    SectionHeader(title: "Fáze výplaty renty")
+                    SectionHeader(title: String(localized: "Annuity payout phase"))
                     let nRenta = result.inputs.rentaYears * 12
-                    FormulaBox(text: "R = FV × (i × (1+i)^n) / ((1+i)^n − 1)\nFV = \(result.futureValue.formattedCZK), n = \(nRenta) měs.")
+                    FormulaBox(text: "R = FV × (i × (1+i)^n) / ((1+i)^n − 1)\nFV = \(result.futureValue.formattedCZK), n = \(nRenta) \(String(localized: "mo."))")
                     VStack(spacing: 0) {
-                        RowView(label: "Počáteční kapitál", value: result.breakdown.principalInRenta.formattedCZK)
-                        RowView(label: "Celkem vyplaceno", value: result.breakdown.totalPaidOut.formattedCZK)
-                        RowView(label: "Z toho výnosy v rentě", value: result.breakdown.interestInRenta.formattedCZK)
-                        RowView(label: "Měsíční renta", value: result.monthlyRenta.formattedCZK, highlighted: true)
+                        RowView(label: String(localized: "Initial capital"), value: result.breakdown.principalInRenta.formattedCZK)
+                        RowView(label: String(localized: "Total paid out"), value: result.breakdown.totalPaidOut.formattedCZK)
+                        RowView(label: String(localized: "Of which returns in annuity"), value: result.breakdown.interestInRenta.formattedCZK)
+                        RowView(label: String(localized: "Monthly annuity"), value: result.monthlyRenta.formattedCZK, highlighted: true)
                     }
 
                     Divider()
 
-                    // Section: Infinite renta
-                    SectionHeader(title: "Nekonečná renta")
+                    // Section: Endless Annuity
+                    SectionHeader(title: String(localized: "Endless Annuity"))
                     FormulaBox(text: result.breakdown.infFormulaDecomposed)
-                    Text("Při nekonečné rentě vyplácíte jen výnosy – jistina zůstává zachována a renta může trvat donekonečna.")
+                    Text("With an endless annuity, you pay out only returns – the principal is preserved and the annuity can last forever.")
                         .font(.caption)
                         .foregroundStyle(Color.secondary)
                 }
                 .padding(.top, 12)
             } label: {
-                Text("Jak jsme to spočítali")
+                Text("How we calculated it")
                     .font(.headline)
                     .fontWeight(.semibold)
                     .foregroundStyle(Color.primary)
@@ -182,13 +182,23 @@ struct BreakdownView: View {
 
 private extension Double {
     var formattedCZKDouble: String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.locale = Locale(identifier: "cs_CZ")
-        formatter.groupingSeparator = "\u{202F}"
-        formatter.minimumFractionDigits = 0
-        formatter.maximumFractionDigits = 0
-        let formatted = formatter.string(from: NSNumber(value: self)) ?? "\(self)"
-        return "\(formatted) Kč"
+        let isCzech = Bundle.main.preferredLocalizations.first?.hasPrefix("cs") ?? false
+        if isCzech {
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .decimal
+            formatter.locale = Locale(identifier: "cs_CZ")
+            formatter.groupingSeparator = "\u{202F}"
+            formatter.minimumFractionDigits = 0
+            formatter.maximumFractionDigits = 0
+            let formatted = formatter.string(from: NSNumber(value: self)) ?? "\(self)"
+            return "\(formatted) Kč"
+        } else {
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .currency
+            formatter.locale = Locale(identifier: "en_GB")
+            formatter.currencyCode = "EUR"
+            formatter.maximumFractionDigits = 0
+            return formatter.string(from: NSNumber(value: self)) ?? "€\(Int(self))"
+        }
     }
 }

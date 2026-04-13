@@ -1,0 +1,77 @@
+/* App */
+"Endless Annuity" = "Nekonečná renta";
+"Calculate how much you can save for retirement" = "Spočítej si, jak velkou rentu si naspoříš";
+"Indicative calculation. Does not account for inflation or investment taxes. Not investment advice." = "Orientační výpočet. Nezohledňuje inflaci ani daně z výnosů. Nejedná se o investiční doporučení.";
+"Fill in all fields correctly to see your results" = "Vyplň správně všechna pole pro zobrazení výsledků";
+
+/* Input */
+"Settings" = "Nastavení";
+"Current age" = "Aktuální věk";
+"yrs" = "let";
+"Retirement age" = "Věk do důchodu";
+"Annuity years" = "Roky pobírání renty";
+"Monthly investment" = "Měsíční investice";
+"Annual return" = "Roční zhodnocení";
+"About Annual Return" = "O ročním zhodnocení";
+"Usually 4–10% depending on investment type. Conservative portfolio ~4%, balanced ~6%, aggressive ~8–10%. Excludes inflation." = "Obvykle 4–10 % podle typu investic. Konzervativní portfolio ~4 %, vyvážené ~6 %, dynamické ~8–10 %. Nezohledňuje inflaci.";
+
+/* Errors */
+"Age must be 18–80" = "Věk musí být 18–80 let";
+"Must be higher than current age" = "Musí být vyšší než aktuální věk";
+"Maximum 85 years" = "Maximálně 85 let";
+"Annuity years must be 1–50" = "Roky renty musí být 1–50";
+"Investment 0–1,000,000 CZK" = "Investice 0–1 000 000 Kč";
+"Return 0–20%" = "Zhodnocení 0–20 %";
+
+/* Results */
+"Annuity for %lld years" = "Renta na %lld let";
+"Monthly payout for %lld years" = "Měsíční výplata po dobu %lld let";
+"Saved: %@" = "Naspořeno: %@";
+"Monthly payout forever" = "Měsíční výplata navždy";
+"Capital preserved" = "Kapitál zůstane zachován";
+
+/* Chart */
+"Capital development over time" = "Vývoj kapitálu v čase";
+"Age" = "Věk";
+"Capital" = "Kapitál";
+"Retirement" = "Důchod";
+"Portfolio value" = "Hodnota portfolia";
+"Retirement age" = "Věk odchodu do důchodu";
+
+/* Breakdown */
+"How we calculated it" = "Jak jsme to spočítali";
+"Inputs" = "Vstupy";
+"Monthly rate (i)" = "Měsíční sazba (i)";
+"mo." = "měs.";
+"Savings phase" = "Fáze spoření";
+"Total deposited" = "Celkem vloženo";
+"Investment returns" = "Výnosy z investic";
+"Portfolio value at retirement" = "Hodnota portfolia při odchodu do důchodu";
+"Portfolio development by stages" = "Vývoj portfolia po etapách";
+"Deposited" = "Vloženo";
+"Portfolio" = "Portfolio";
+"Return" = "Výnos";
+"Annuity payout phase" = "Fáze výplaty renty";
+"Initial capital" = "Počáteční kapitál";
+"Total paid out" = "Celkem vyplaceno";
+"Of which returns in annuity" = "Z toho výnosy v rentě";
+"Monthly annuity" = "Měsíční renta";
+"With an endless annuity, you pay out only returns – the principal is preserved and the annuity can last forever." = "Při nekonečné rentě vyplácíte jen výnosy – jistina zůstává zachována a renta může trvat donekonečna.";
+
+/* About */
+"About the app" = "O aplikaci";
+"We created the Endless Annuity app so everyone can easily calculate how much they need to save and how much it will bring them." = "Aplikaci Nekonečná renta jsme vytvořili, aby si každý mohl jednoduše spočítat, kolik potřebuje odkládat a kolik mu to jednou přinese.";
+"Visit 1P website" = "Navštívit web 1P";
+"Write to us about a similar app" = "Napsat nám o podobnou aplikaci";
+"Created by " = "Vytvořila ";
+
+/* Share */
+"Share results" = "Sdílet výsledky";
+"📊 My results from Endless Annuity" = "📊 Moje výsledky z Nekonečné renty";
+"⚙️ Settings" = "⚙️ Nastavení";
+"years of saving" = "let spoření";
+"💰 Saved capital" = "💰 Naspořený kapitál";
+"📈 Results" = "📈 Výsledky";
+"month" = "měsíc";
+"capital preserved" = "kapitál zůstane zachován";
+"Calculated with the Endless Annuity app by První pozice" = "Spočítáno v aplikaci Nekonečná renta od První pozice";

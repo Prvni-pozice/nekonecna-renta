@@ -68,16 +68,16 @@ struct ResultCardsView: View {
     @ViewBuilder
     var cards: some View {
         RentaCard(
-            title: "Renta na \(result.inputs.rentaYears) let",
+            title: String(format: String(localized: "Annuity for %lld years"), result.inputs.rentaYears),
             amount: result.monthlyRenta,
-            subtitle: "Měsíční výplata po dobu \(result.inputs.rentaYears) let",
-            detail: "Naspořeno: \(result.futureValue.formattedCZK)"
+            subtitle: String(format: String(localized: "Monthly payout for %lld years"), result.inputs.rentaYears),
+            detail: String(format: String(localized: "Saved: %@"), result.futureValue.formattedCZK)
         )
         RentaCard(
-            title: "Nekonečná renta",
+            title: String(localized: "Endless Annuity"),
             amount: result.infiniteRenta,
-            subtitle: "Měsíční výplata navždy",
-            detail: "Kapitál zůstane zachován"
+            subtitle: String(localized: "Monthly payout forever"),
+            detail: String(localized: "Capital preserved")
         )
     }
 }

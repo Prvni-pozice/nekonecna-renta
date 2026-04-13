@@ -1,5 +1,6 @@
 'use client';
 
+import { useDict } from '@/lib/dict-context';
 import {
   AreaChart,
   Area,
@@ -21,26 +22,15 @@ interface CapitalChartProps {
   rentaYears: number;
 }
 
-function fmtShort(value: number): string {
-  if (value >= 1_000_000) {
-    return (value / 1_000_000).toLocaleString('cs-CZ', { maximumFractionDigits: 1 }) + ' mil';
-  }
-  if (value >= 1_000) {
-    return (value / 1_000).toLocaleString('cs-CZ', { maximumFractionDigits: 0 }) + ' tis';
-  }
-  return value.toLocaleString('cs-CZ');
-}
-
-function fmtCZK(value: number): string {
-  return new Intl.NumberFormat('cs-CZ').format(Math.round(value)) + ' Kč';
-}
-
 export default function CapitalChart({ chartData, retirementAge, fv, rentaYears }: CapitalChartProps) {
+  const dict = useDict();
+  const fmtShort = dict.fmtShort;
+  const fmtCZK = dict.fmt;
   const peakPoint = chartData.reduce((max, p) => (p.value > max.value ? p : max), chartData[0] ?? { age: 0, value: 0 });
 
   return (
     <div className="space-y-2">
-      <h3 className="text-sm font-semibold text-white/60 tracking-wide">Vývoj kapitálu v čase</h3>
+      <h3 className="text-sm font-semibold text-white/60 tracking-wide">{dict.chartTitle}</h3>
       <ResponsiveContainer width="100%" height={260}>
         <AreaChart data={chartData} margin={{ top: 24, right: 16, left: 8, bottom: 8 }}>
           <defs>
@@ -55,7 +45,7 @@ export default function CapitalChart({ chartData, retirementAge, fv, rentaYears 
             tick={{ fontSize: 11, fill: 'rgba(255,255,255,0.35)' }}
             tickLine={false}
             axisLine={false}
-            label={{ value: 'věk', position: 'insideBottomRight', offset: -4, fontSize: 11, fill: 'rgba(255,255,255,0.25)' }}
+            label={{ value: dict.chartAge, position: 'insideBottomRight', offset: -4, fontSize: 11, fill: 'rgba(255,255,255,0.25)' }}
           />
           <YAxis
             tickFormatter={fmtShort}
@@ -65,8 +55,8 @@ export default function CapitalChart({ chartData, retirementAge, fv, rentaYears 
             width={56}
           />
           <Tooltip
-            formatter={(value) => [fmtCZK(Number(value)), 'Kapitál']}
-            labelFormatter={(label) => `Věk ${label} let`}
+            formatter={(value) => [fmtCZK(Number(value)), dict.chartCapital]}
+            labelFormatter={(label) => dict.chartAgeLabel(Number(label))}
             contentStyle={{ borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)', fontSize: 12, backgroundColor: '#1a1f35', color: '#fff' }}
           />
           <ReferenceLine
@@ -75,7 +65,7 @@ export default function CapitalChart({ chartData, retirementAge, fv, rentaYears 
             strokeDasharray="4 3"
             strokeWidth={1.5}
           >
-            <Label value="Důchod" position="insideTopRight" fontSize={11} fill="#84cc16" offset={4} />
+            <Label value={dict.chartRetirement} position="insideTopRight" fontSize={11} fill="#84cc16" offset={4} />
           </ReferenceLine>
           {peakPoint && (
             <ReferenceDot
@@ -100,7 +90,7 @@ export default function CapitalChart({ chartData, retirementAge, fv, rentaYears 
         </AreaChart>
       </ResponsiveContainer>
       <p className="text-xs text-white/25">
-        Zelená plocha = hodnota tvých investic. Spořící fáze končí v {retirementAge} letech, pak začíná výplata renty.
+        {dict.chartNote(retirementAge)}
       </p>
     </div>
   );

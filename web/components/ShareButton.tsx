@@ -2,42 +2,23 @@
 
 import { useState } from 'react';
 import { CalculationResult } from '@/lib/calculations';
-
-function fmtKc(n: number): string {
-  return new Intl.NumberFormat('cs-CZ').format(n) + ' Kč';
-}
-
-function buildShareText(result: CalculationResult): string {
-  const b = result.breakdown;
-  const years = b.retirementAge - b.currentAge;
-
-  return `📊 Moje výsledky z Nekonečné renty
-
-⚙️ Nastavení
-• Věk: ${b.currentAge} → ${b.retirementAge} let (${years} let spoření)
-• Měsíční investice: ${fmtKc(b.monthlyInvestment)}
-• Roční zhodnocení: ${b.annualRate} %
-
-💰 Naspořený kapitál: ${fmtKc(b.fv)}
-
-📈 Výsledky
-• Renta na ${b.rentaYears} let: ${fmtKc(result.R)} / měsíc
-• Nekonečná renta: ${fmtKc(result.R_inf)} / měsíc
-  (kapitál zůstane zachován)
-
-Spočítáno v aplikaci Nekonečná renta od První pozice
-www.prvni-pozice.com`;
-}
+import { useDict } from '@/lib/dict-context';
 
 export default function ShareButton({ result }: { result: CalculationResult }) {
+  const dict = useDict();
   const [copied, setCopied] = useState(false);
 
   async function handleShare() {
-    const text = buildShareText(result);
+    const b = result.breakdown;
+    const text = dict.shareText(
+      b.currentAge, b.retirementAge, b.rentaYears,
+      b.monthlyInvestment, b.annualRate, b.fv,
+      result.R, result.R_inf
+    );
 
     if (navigator.share) {
       try {
-        await navigator.share({ title: 'Nekonečná renta', text });
+        await navigator.share({ title: dict.appTitle, text });
       } catch {
         // user cancelled — no-op
       }
@@ -58,7 +39,7 @@ export default function ShareButton({ result }: { result: CalculationResult }) {
         <polyline points="16 6 12 2 8 6" />
         <line x1="12" y1="2" x2="12" y2="15" />
       </svg>
-      {copied ? 'Zkopírováno!' : 'Sdílet výsledky'}
+      {copied ? dict.shareCopied : dict.shareButton}
     </button>
   );
 }

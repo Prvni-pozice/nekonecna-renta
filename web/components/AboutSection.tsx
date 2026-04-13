@@ -1,23 +1,24 @@
 'use client';
 
 import { FIRMA_NAZEV, FIRMA_WEB, FIRMA_EMAIL, FIRMA_TAGLINE, APP_VERSION } from '@/lib/branding';
+import { useDict } from '@/lib/dict-context';
 
 export default function AboutSection() {
+  const dict = useDict();
   return (
     <div className="space-y-5">
       {/* O aplikaci */}
       <div className="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-xl shadow-black/30">
         <details className="group">
           <summary className="cursor-pointer list-none flex items-center justify-between select-none">
-            <span className="text-sm font-medium text-white/50">O aplikaci</span>
+            <span className="text-sm font-medium text-white/50">{dict.aboutTitle}</span>
             <span className="text-white/25 text-xs group-open:rotate-180 transition-transform inline-block">▼</span>
           </summary>
 
           <div className="mt-4 space-y-4">
             <p className="text-sm italic font-medium" style={{ color: '#A3E635' }}>{FIRMA_TAGLINE}</p>
             <p className="text-sm text-white/35 leading-relaxed">
-              Aplikaci Nekonečná renta jsme vytvořili, aby si každý mohl jednoduše spočítat,
-              kolik potřebuje odkládat a kolik mu to jednou přinese.
+              {dict.aboutDescription}
             </p>
             <div className="flex flex-col gap-2 pt-1">
               <a
@@ -27,14 +28,14 @@ export default function AboutSection() {
                 className="block w-full text-center text-sm py-2.5 px-4 rounded-xl font-medium text-black transition-colors"
                 style={{ backgroundColor: '#A3E635' }}
               >
-                Navštívit web 1P
+                {dict.aboutVisitWeb}
               </a>
               <a
                 href={`mailto:${FIRMA_EMAIL}`}
                 className="block w-full text-center text-sm py-2.5 px-4 rounded-xl font-medium text-black transition-colors"
                 style={{ backgroundColor: '#A3E635' }}
               >
-                Napsat nám o podobnou aplikaci
+                {dict.aboutContactUs}
               </a>
             </div>
           </div>
@@ -44,7 +45,7 @@ export default function AboutSection() {
       {/* Footer */}
       <div className="border-t border-white/8 pt-5 pb-2 text-center space-y-1.5">
         <p className="text-sm text-white/30">
-          Vytvořila{' '}
+          {dict.aboutCreatedBy}
           <a
             href={FIRMA_WEB}
             target="_blank"
@@ -55,7 +56,7 @@ export default function AboutSection() {
           </a>
         </p>
         <p className="text-xs text-white/15">
-          v{APP_VERSION} · Orientační výpočet, nejedná se o investiční doporučení.
+          {dict.aboutFooter(APP_VERSION)}
         </p>
       </div>
     </div>

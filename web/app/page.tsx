@@ -9,6 +9,7 @@ import CalculationBreakdown from '@/components/CalculationBreakdown';
 import AboutSection from '@/components/AboutSection';
 import ShareButton from '@/components/ShareButton';
 import { calculate } from '@/lib/calculations';
+import { useDict } from '@/lib/dict-context';
 
 function InfoIcon() {
   return (
@@ -19,11 +20,8 @@ function InfoIcon() {
   );
 }
 
-function fmt(n: number): string {
-  return new Intl.NumberFormat('cs-CZ').format(n) + ' Kč';
-}
-
 export default function Home() {
+  const dict = useDict();
   const [currentAge, setCurrentAge] = useState('30');
   const [retirementAge, setRetirementAge] = useState('60');
   const [rentaYears, setRentaYears] = useState('20');
@@ -50,12 +48,12 @@ export default function Home() {
     const e: Record<string, string> = {};
     const { ca, ra, ry, mi, ar } = parsed;
 
-    if (ca !== null && (ca < 18 || ca > 80)) e.currentAge = 'Věk musí být 18–80 let.';
-    if (ra !== null && ca !== null && ra <= ca) e.retirementAge = 'Musí být větší než aktuální věk.';
-    if (ra !== null && ra > 85) e.retirementAge = 'Maximum je 85 let.';
-    if (ry !== null && (ry < 1 || ry > 50)) e.rentaYears = 'Počet let renty musí být 1–50.';
-    if (mi !== null && (mi < 0 || mi > 10_000_000)) e.monthlyInvestment = 'Vklad musí být 0–10 000 000 Kč.';
-    if (ar !== null && (ar < 0 || ar > 20)) e.annualRate = 'Zhodnocení musí být 0–20 %.';
+    if (ca !== null && (ca < 18 || ca > 80)) e.currentAge = dict.errorCurrentAge;
+    if (ra !== null && ca !== null && ra <= ca) e.retirementAge = dict.errorRetirementAgeTooLow;
+    if (ra !== null && ra > 85) e.retirementAge = dict.errorRetirementAgeTooHigh;
+    if (ry !== null && (ry < 1 || ry > 50)) e.rentaYears = dict.errorRentaYears;
+    if (mi !== null && (mi < 0 || mi > 10_000_000)) e.monthlyInvestment = dict.errorMonthlyInvestment;
+    if (ar !== null && (ar < 0 || ar > 20)) e.annualRate = dict.errorAnnualRate;
 
     return e;
   }, [parsed]);
@@ -88,10 +86,10 @@ export default function Home() {
         {/* Header */}
         <div className="space-y-2 text-center pb-2">
           <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-br from-white via-white to-white/60 bg-clip-text text-transparent">
-            Nekonečná renta
+            {dict.appTitle}
           </h1>
           <p className="text-white/40 text-sm font-light tracking-wide">
-            Kolik si budeš moci vyplácet v důchodu?
+            {dict.appSubtitle}
           </p>
         </div>
 
@@ -100,52 +98,52 @@ export default function Home() {
           <div className="grid grid-cols-2 gap-4">
             <InputField
               id="currentAge"
-              label="Aktuální věk"
+              label={dict.inputCurrentAge}
               value={currentAge}
               onChange={setCurrentAge}
               min={18}
               max={80}
-              suffix="let"
+              suffix={dict.inputSuffixYears}
               error={errors.currentAge}
             />
             <InputField
               id="retirementAge"
-              label="Věk do důchodu"
+              label={dict.inputRetirementAge}
               value={retirementAge}
               onChange={setRetirementAge}
               min={19}
               max={85}
-              suffix="let"
+              suffix={dict.inputSuffixYears}
               error={errors.retirementAge}
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <InputField
               id="rentaYears"
-              label="Roky pobírání renty"
+              label={dict.inputRentaYears}
               value={rentaYears}
               onChange={setRentaYears}
               min={1}
               max={50}
-              suffix="let"
+              suffix={dict.inputSuffixYears}
               error={errors.rentaYears}
             />
             <InputField
               id="monthlyInvestment"
-              label="Měsíční investice"
+              label={dict.inputMonthlyInvestment}
               value={monthlyInvestment}
               onChange={setMonthlyInvestment}
               min={0}
               max={10_000_000}
               sliderMax={100_000}
               step={500}
-              suffix="Kč"
+              suffix={dict.currencySuffix}
               error={errors.monthlyInvestment}
             />
           </div>
           <InputField
             id="annualRate"
-            label="Roční zhodnocení"
+            label={dict.inputAnnualRate}
             value={annualRate}
             onChange={setAnnualRate}
             min={0}
@@ -155,11 +153,11 @@ export default function Home() {
             error={errors.annualRate}
             adornment={
               <Tooltip>
-                <TooltipTrigger className="focus:outline-none" aria-label="Nápověda ke zhodnocení">
+                <TooltipTrigger className="focus:outline-none" aria-label={dict.inputAnnualRate}>
                   <InfoIcon />
                 </TooltipTrigger>
                 <TooltipContent className="max-w-56 text-xs leading-relaxed">
-                  Obvykle 4–10 % podle typu investic. Konzervativní portfolio ~4 %, vyvážené ~6 %, dynamické ~8–10 %. Nezohledňuje inflaci.
+                  {dict.inputAnnualRateTooltip}
                 </TooltipContent>
               </Tooltip>
             }
@@ -171,21 +169,21 @@ export default function Home() {
           <>
             <div className="flex flex-col sm:flex-row gap-4">
               <ResultCard
-                title={`Renta na ${parsed.ry} let`}
+                title={dict.fixedRentaTitle(parsed.ry!)}
                 amount={result.R}
-                subtitle={`Po ${parsed.ry} letech ti zůstane 0 Kč`}
-                extra={`Naspořeno při důchodu: ${fmt(result.fv)}`}
+                subtitle={dict.fixedRentaSubtitle(parsed.ry!)}
+                extra={dict.fixedRentaExtra(dict.fmt(result.fv))}
               />
               <ResultCard
-                title="Nekonečná renta"
+                title={dict.infiniteRentaTitle}
                 amount={result.R_inf}
-                subtitle="Vyplácíš jen výnosy, jistina zůstává nedotčená"
+                subtitle={dict.infiniteRentaSubtitle}
               />
             </div>
 
             {/* Disclaimer */}
             <p className="text-xs text-white/25 text-center px-2 -mt-2">
-              Orientační výpočet. Nezohledňuje inflaci ani daně z výnosů. Nejedná se o investiční doporučení.
+              {dict.disclaimer}
             </p>
 
             {/* Graf */}
@@ -208,7 +206,7 @@ export default function Home() {
           </>
         ) : (
           <div className="rounded-2xl border border-dashed border-white/10 p-10 text-center text-white/25 text-sm tracking-wide">
-            Vyplň formulář pro zobrazení výsledků
+            {dict.emptyState}
           </div>
         )}
 

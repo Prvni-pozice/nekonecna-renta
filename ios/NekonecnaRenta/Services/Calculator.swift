@@ -107,7 +107,7 @@ enum Calculator {
         let principalInRenta = fv
         let interestInRenta = max(0, Int((Double(R) * Double(nRenta) - Double(fv)).rounded(.down)))
         let monthlyRatePct = String(format: "%.4f", i * 100)
-        let infFormulaDecomposed = "R∞ = \(fv.formattedCZK) × \(monthlyRatePct) % = \(rInf.formattedCZK) / měsíc"
+        let infFormulaDecomposed = "R∞ = \(fv.formattedCZK) × \(monthlyRatePct) % = \(rInf.formattedCZK) / \(String(localized: "month"))"
 
         let breakdown = Breakdown(
             totalDeposited: totalDeposited,
