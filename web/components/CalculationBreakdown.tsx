@@ -43,6 +43,9 @@ export default function CalculationBreakdown({ breakdown }: Props) {
     rentaYears,
     monthlyInvestment,
     annualRate,
+    initialLumpSum,
+    incomeEscalator,
+    valueAdjustment,
     savingsYears,
     nSpor,
     monthlyRate,
@@ -54,10 +57,21 @@ export default function CalculationBreakdown({ breakdown }: Props) {
     totalPaidOut,
     principalInRenta,
     interestInRenta,
-    infFormulaDecomposed,
+    fvReal,
+    R_real,
+    R_inf_real,
   } = breakdown;
 
   const monthlyRatePct = (monthlyRate * 100).toFixed(4);
+
+  const paramLabel = (() => {
+    if (!valueAdjustment) return '';
+    switch (valueAdjustment.parameter) {
+      case 'inflation': return dict.advancedParamInflation;
+      case 'wage': return dict.advancedParamWage;
+      case 'realEstate': return dict.advancedParamRealEstate;
+    }
+  })();
 
   return (
     <details className="group">
@@ -74,6 +88,18 @@ export default function CalculationBreakdown({ breakdown }: Props) {
           <Row label={dict.breakdownRentaYears} value={`${rentaYears} ${dict.inputSuffixYears}`} />
           <Row label={dict.breakdownMonthlyInvestment} value={fmt(monthlyInvestment)} />
           <Row label={dict.breakdownAnnualRate} value={`${annualRate} %`} />
+          {initialLumpSum > 0 && (
+            <Row label={dict.breakdownInitialLumpSum} value={fmt(initialLumpSum)} />
+          )}
+          {incomeEscalator > 0 && (
+            <Row label={dict.breakdownEscalator} value={`${incomeEscalator.toFixed(1)} %`} />
+          )}
+          {valueAdjustment && (
+            <Row
+              label={dict.breakdownAdjustment}
+              value={`${paramLabel} · ${valueAdjustment.annualRate} %`}
+            />
+          )}
         </Section>
 
         {/* Savings phase */}
@@ -92,6 +118,22 @@ export default function CalculationBreakdown({ breakdown }: Props) {
             FV = {fmtNum(monthlyInvestment)} × (((1+{monthlyRatePct}%)^{nSpor} − 1) / {monthlyRatePct}%) = {fmt(fv)}
           </Formula>
         </Section>
+
+        {/* Reálná hodnota */}
+        {valueAdjustment && fvReal !== undefined && (
+          <Section title={dict.breakdownRealValueTitle}>
+            <p className="text-xs text-white/35 leading-snug pb-1">
+              {dict.breakdownRealValueExplanation(paramLabel, valueAdjustment.annualRate)}
+            </p>
+            <Row label={dict.breakdownFvReal} value={fmt(fvReal)} />
+            {R_real !== undefined && (
+              <Row label={dict.breakdownRReal} value={`${fmt(R_real)} ${dict.perMonthLabel}`} />
+            )}
+            {R_inf_real !== undefined && (
+              <Row label={dict.breakdownRInfReal} value={`${fmt(R_inf_real)} ${dict.perMonthLabel}`} />
+            )}
+          </Section>
+        )}
 
         {/* Milníky */}
         {milestones.length > 0 && (
@@ -137,7 +179,7 @@ export default function CalculationBreakdown({ breakdown }: Props) {
         <Section title={dict.breakdownInfiniteTitle}>
           <Formula>
             R∞ = FV × i<br />
-            {infFormulaDecomposed}
+            R∞ = {fmt(fv)} × {monthlyRatePct} % = {fmt(Math.floor(fv * monthlyRate))} {dict.perMonthLabel}
           </Formula>
           <p className="text-sm text-white/35 pt-1 pb-2">
             {dict.breakdownInfiniteExplanation(fmt(fv))}

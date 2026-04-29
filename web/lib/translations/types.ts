@@ -10,6 +10,7 @@ export interface Dict {
   appSubtitle: string
   disclaimer: string
   emptyState: string
+  perMonthLabel: string
 
   inputCurrentAge: string
   inputRetirementAge: string
@@ -19,18 +20,54 @@ export interface Dict {
   inputAnnualRateTooltip: string
   inputSuffixYears: string
 
+  // === Initial lump sum ===
+  inputInitialLumpSum: string
+  inputInitialLumpSumHint: string
+  initialLumpSumToggle: string
+
+  // === Advanced mode ===
+  advancedToggleTitle: string
+  advancedToggleHint: string
+
+  // Value adjustment
+  advancedAdjustmentTitle: string
+  advancedAdjustmentHint: string
+  advancedParamInflation: string
+  advancedParamWage: string
+  advancedParamRealEstate: string
+  advancedParamHintInflation: string
+  advancedParamHintWage: string
+  advancedParamHintRealEstate: string
+
+  // Income escalator
+  advancedEscalatorTitle: string
+  advancedEscalatorHint: string
+
+  // Goal-seek mode
+  advancedModeTitle: string
+  advancedModeForward: string
+  advancedModeGoalSeek: string
+  advancedModeGoalSeekHint: string
+  inputTargetMonthlyRenta: string
+  derivedMonthlyInvestmentLabel: string
+
   errorCurrentAge: string
   errorRetirementAgeTooLow: string
   errorRetirementAgeTooHigh: string
   errorRentaYears: string
   errorMonthlyInvestment: string
   errorAnnualRate: string
+  errorInitialLumpSum: string
+  errorEscalator: string
+  errorAdjustmentRate: string
+  errorTargetMonthlyRenta: string
 
   fixedRentaTitle: (years: number) => string
   fixedRentaSubtitle: (years: number) => string
   fixedRentaExtra: (fv: string) => string
   infiniteRentaTitle: string
   infiniteRentaSubtitle: string
+  realValueSubtitle: (amount: string) => string
 
   aboutTitle: string
   aboutDescription: string
@@ -46,6 +83,9 @@ export interface Dict {
   breakdownRentaYears: string
   breakdownMonthlyInvestment: string
   breakdownAnnualRate: string
+  breakdownInitialLumpSum: string
+  breakdownEscalator: string
+  breakdownAdjustment: string
   breakdownSavingsPhase: string
   breakdownSavingsDuration: (years: number, months: number) => string
   breakdownMonthlyRate: string
@@ -65,13 +105,21 @@ export interface Dict {
   breakdownInterestDuringWithdrawal: string
   breakdownInfiniteTitle: string
   breakdownInfiniteExplanation: (fv: string) => string
+  breakdownRealValueTitle: string
+  breakdownRealValueExplanation: (paramLabel: string, rate: number) => string
+  breakdownFvReal: string
+  breakdownRReal: string
+  breakdownRInfReal: string
 
   chartTitle: string
   chartAge: string
   chartCapital: string
+  chartCapitalReal: string
   chartAgeLabel: (age: number) => string
   chartRetirement: string
   chartNote: (age: number) => string
+  chartLegendNominal: string
+  chartLegendReal: string
 
   shareButton: string
   shareCopied: string
