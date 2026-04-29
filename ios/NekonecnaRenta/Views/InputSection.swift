@@ -118,6 +118,10 @@ struct InputSection: View {
         return minAge...85
     }
 
+    private var isGoalSeek: Bool {
+        vm.advancedEnabled && vm.mode == .goalSeek
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Settings")
@@ -154,15 +158,80 @@ struct InputSection: View {
                 keyboardType: .numberPad
             )
 
-            SliderInputField(
-                label: String(localized: "Monthly investment"),
-                suffix: "Kč",
-                text: $vm.monthlyInvestment,
-                errorMessage: vm.errors["monthlyInvestment"],
-                range: 0...100_000,
-                step: 500,
-                keyboardType: .numberPad
-            )
+            // Monthly investment — hidden in goal-seek mode (computed instead)
+            if !isGoalSeek {
+                SliderInputField(
+                    label: String(localized: "Monthly investment"),
+                    suffix: "Kč",
+                    text: $vm.monthlyInvestment,
+                    errorMessage: vm.errors["monthlyInvestment"],
+                    range: 0...100_000,
+                    step: 500,
+                    keyboardType: .numberPad
+                )
+            }
+
+            // Lump sum disclosure
+            DisclosureGroup(isExpanded: $vm.lumpSumExpanded) {
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack(spacing: 0) {
+                        TextField("0", text: $vm.initialLumpSum)
+                            .keyboardType(.numberPad)
+                            .font(.body)
+                            .padding(.vertical, 10)
+                            .padding(.leading, 12)
+
+                        Text("Kč")
+                            .font(.caption)
+                            .foregroundStyle(Color.secondary)
+                            .padding(.trailing, 12)
+                            .padding(.vertical, 10)
+                    }
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color(.systemGray6))
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(vm.errors["initialLumpSum"] != nil ? Color.red.opacity(0.7) : Color.clear, lineWidth: 1)
+                    )
+
+                    if let error = vm.errors["initialLumpSum"] {
+                        Text(error)
+                            .font(.caption2)
+                            .foregroundStyle(Color.red)
+                    }
+                }
+                .padding(.top, 6)
+            } label: {
+                Text("I also have an initial lump sum")
+                    .font(.caption)
+                    .fontWeight(.medium)
+                    .foregroundStyle(Color.primary)
+            }
+            .tint(Color.brandLime)
+
+            Divider()
+
+            // Advanced mode master toggle
+            Toggle(isOn: $vm.advancedEnabled) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Advanced mode")
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(Color.primary)
+                    Text("Inflation, escalator, goal seek")
+                        .font(.caption2)
+                        .foregroundStyle(Color.secondary)
+                }
+            }
+            .tint(Color.brandLime)
+
+            if vm.advancedEnabled {
+                AdvancedInputSection(vm: vm)
+            }
+
+            Divider()
 
             // Annual return with info button
             VStack(alignment: .leading, spacing: 4) {
@@ -242,5 +311,155 @@ struct InputSection: View {
                 .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 2)
         )
         .padding(.horizontal)
+    }
+}
+
+// MARK: - Advanced section
+
+private struct AdvancedInputSection: View {
+    @Bindable var vm: RentaViewModel
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            // What to compute (mode picker)
+            VStack(alignment: .leading, spacing: 6) {
+                Text("What to compute")
+                    .font(.caption)
+                    .fontWeight(.medium)
+                    .foregroundStyle(Color.secondary)
+
+                Picker("", selection: $vm.mode) {
+                    Text("Compute the resulting annuity").tag(CalcMode.forward)
+                    Text("Compute the required deposit").tag(CalcMode.goalSeek)
+                }
+                .pickerStyle(.segmented)
+            }
+
+            // Target annuity (only in goal-seek mode)
+            if vm.mode == .goalSeek {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Target monthly annuity")
+                        .font(.caption)
+                        .fontWeight(.medium)
+                        .foregroundStyle(Color.secondary)
+
+                    HStack(spacing: 0) {
+                        TextField("0", text: $vm.targetMonthlyRenta)
+                            .keyboardType(.numberPad)
+                            .font(.body)
+                            .padding(.vertical, 10)
+                            .padding(.leading, 12)
+                        Text("Kč")
+                            .font(.caption)
+                            .foregroundStyle(Color.secondary)
+                            .padding(.trailing, 12)
+                            .padding(.vertical, 10)
+                    }
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color(.systemGray6))
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(vm.errors["targetMonthlyRenta"] != nil ? Color.red.opacity(0.7) : Color.clear, lineWidth: 1)
+                    )
+
+                    if let error = vm.errors["targetMonthlyRenta"] {
+                        Text(error)
+                            .font(.caption2)
+                            .foregroundStyle(Color.red)
+                    }
+
+                    if let derived = vm.result?.derivedMonthlyInvestment {
+                        Text(String(format: String(localized: "Required monthly deposit: %@"), derived.formattedCZK))
+                            .font(.caption)
+                            .foregroundStyle(Color.brandLime)
+                            .padding(.top, 2)
+                    }
+                }
+            }
+
+            // Value adjustment
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Modelling value over time")
+                    .font(.caption)
+                    .fontWeight(.medium)
+                    .foregroundStyle(Color.secondary)
+
+                Picker("", selection: Binding(
+                    get: { vm.adjustmentParam },
+                    set: { vm.selectAdjustmentParam($0) }
+                )) {
+                    ForEach(ValueAdjustmentParam.allCases, id: \.self) { p in
+                        Text(p.localizedName).tag(p)
+                    }
+                }
+                .pickerStyle(.segmented)
+
+                HStack(spacing: 0) {
+                    TextField("0", text: $vm.adjustmentRate)
+                        .keyboardType(.decimalPad)
+                        .font(.body)
+                        .padding(.vertical, 10)
+                        .padding(.leading, 12)
+                    Text("% / \(String(localized: "yr"))")
+                        .font(.caption)
+                        .foregroundStyle(Color.secondary)
+                        .padding(.trailing, 12)
+                        .padding(.vertical, 10)
+                }
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color(.systemGray6))
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(vm.errors["adjustmentRate"] != nil ? Color.red.opacity(0.7) : Color.clear, lineWidth: 1)
+                )
+
+                if let error = vm.errors["adjustmentRate"] {
+                    Text(error)
+                        .font(.caption2)
+                        .foregroundStyle(Color.red)
+                }
+            }
+
+            // Income escalator
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Annual increase of monthly investment")
+                    .font(.caption)
+                    .fontWeight(.medium)
+                    .foregroundStyle(Color.secondary)
+
+                HStack(spacing: 0) {
+                    TextField("0", text: $vm.escalator)
+                        .keyboardType(.decimalPad)
+                        .font(.body)
+                        .padding(.vertical, 10)
+                        .padding(.leading, 12)
+                    Text("% / \(String(localized: "yr"))")
+                        .font(.caption)
+                        .foregroundStyle(Color.secondary)
+                        .padding(.trailing, 12)
+                        .padding(.vertical, 10)
+                }
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color(.systemGray6))
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(vm.errors["escalator"] != nil ? Color.red.opacity(0.7) : Color.clear, lineWidth: 1)
+                )
+
+                if let error = vm.errors["escalator"] {
+                    Text(error)
+                        .font(.caption2)
+                        .foregroundStyle(Color.red)
+                }
+            }
+        }
+        .padding(.leading, 8)
+        .padding(.top, 4)
     }
 }

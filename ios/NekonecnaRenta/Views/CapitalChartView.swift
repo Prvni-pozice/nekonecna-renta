@@ -17,6 +17,12 @@ struct CapitalChartView: View {
         )
     }
 
+    private static let realValueColor = Color(red: 0.984, green: 0.749, blue: 0.141) // amber #fbbf24
+
+    private var hasRealValue: Bool {
+        result.chartData.contains { $0.realValue != nil }
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Capital development over time")
@@ -39,6 +45,16 @@ struct CapitalChartView: View {
                     .foregroundStyle(Color.brandLime)
                     .lineStyle(StrokeStyle(lineWidth: 2))
                     .interpolationMethod(.monotone)
+
+                    if let real = point.realValue {
+                        LineMark(
+                            x: .value(String(localized: "Age"), point.age),
+                            y: .value(String(localized: "In today's value"), real)
+                        )
+                        .foregroundStyle(Self.realValueColor)
+                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [5, 3]))
+                        .interpolationMethod(.monotone)
+                    }
                 }
 
                 RuleMark(x: .value(String(localized: "Retirement"), result.inputs.retirementAge))
@@ -84,7 +100,7 @@ struct CapitalChartView: View {
                     }
                 }
             }
-            .chartXScale(domain: result.inputs.currentAge...(result.chartData.last?.age ?? result.inputs.retirementAge))
+            .chartXScale(domain: result.inputs.currentAge...(result.inputs.retirementAge + result.inputs.rentaYears))
             .frame(height: 260)
 
             // Legend
@@ -96,6 +112,16 @@ struct CapitalChartView: View {
                     Text("Portfolio value")
                         .font(.caption2)
                         .foregroundStyle(Color.secondary)
+                }
+                if hasRealValue {
+                    HStack(spacing: 6) {
+                        RoundedRectangle(cornerRadius: 2)
+                            .fill(Self.realValueColor)
+                            .frame(width: 16, height: 3)
+                        Text("In today's value")
+                            .font(.caption2)
+                            .foregroundStyle(Color.secondary)
+                    }
                 }
                 HStack(spacing: 6) {
                     Rectangle()

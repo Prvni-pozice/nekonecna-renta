@@ -22,6 +22,7 @@ struct ChartPoint: Identifiable {
     var id: Int { age }
     let age: Int
     let capital: Int
+    var realValue: Int? = nil
 }
 
 struct CalculationResult {
@@ -32,4 +33,12 @@ struct CalculationResult {
     let milestones: [MilestoneRow]
     let breakdown: Breakdown
     let inputs: CalculationInputs
+
+    // Advanced — present only when value adjustment is on
+    let futureValueReal: Int?
+    let monthlyRentaReal: Int?
+    let infiniteRentaReal: Int?
+
+    // Goal-seek — present only when mode == .goalSeek
+    let derivedMonthlyInvestment: Int?
 }

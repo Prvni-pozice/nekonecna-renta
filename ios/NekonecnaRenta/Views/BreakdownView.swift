@@ -118,7 +118,16 @@ struct BreakdownView: View {
                         RowView(label: String(localized: "Retirement age"), value: "\(result.inputs.retirementAge) \(String(localized: "yrs"))")
                         RowView(label: String(localized: "Annuity years"), value: "\(result.inputs.rentaYears) \(String(localized: "yrs"))")
                         RowView(label: String(localized: "Monthly investment"), value: result.inputs.monthlyInvestment.formattedCZKDouble)
+                        if result.inputs.initialLumpSum > 0 {
+                            RowView(label: String(localized: "Initial lump sum"), value: result.inputs.initialLumpSum.formattedCZKDouble)
+                        }
                         RowView(label: String(localized: "Annual return"), value: "\(result.inputs.annualReturnRate) %")
+                        if result.inputs.advanced && result.inputs.incomeEscalator > 0 {
+                            RowView(label: String(localized: "Annual increase of monthly investment"), value: String(format: "%.1f %%", result.inputs.incomeEscalator))
+                        }
+                        if result.inputs.advanced, let adj = result.inputs.valueAdjustment {
+                            RowView(label: adj.parameter.localizedName, value: String(format: "%.1f %% / \(String(localized: "yr"))", adj.annualRate))
+                        }
                         RowView(label: String(localized: "Monthly rate (i)"), value: "\(result.breakdown.monthlyRatePct) %")
                     }
 
@@ -161,6 +170,23 @@ struct BreakdownView: View {
                     Text("With an endless annuity, you pay out only returns – the principal is preserved and the annuity can last forever.")
                         .font(.caption)
                         .foregroundStyle(Color.secondary)
+
+                    // Section: Real value (only when value adjustment is on)
+                    if let fvReal = result.futureValueReal,
+                       let rReal = result.monthlyRentaReal,
+                       let rInfReal = result.infiniteRentaReal,
+                       let adj = result.inputs.valueAdjustment {
+                        Divider()
+                        SectionHeader(title: String(localized: "In today's value"))
+                        Text(String(format: String(localized: "Adjusted by %@ at %.1f %% per year"), adj.parameter.localizedName, adj.annualRate))
+                            .font(.caption)
+                            .foregroundStyle(Color.secondary)
+                        VStack(spacing: 0) {
+                            RowView(label: String(localized: "Portfolio value at retirement"), value: fvReal.formattedCZK)
+                            RowView(label: String(localized: "Monthly annuity"), value: rReal.formattedCZK)
+                            RowView(label: String(localized: "Endless Annuity"), value: rInfReal.formattedCZK)
+                        }
+                    }
                 }
                 .padding(.top, 12)
             } label: {
